@@ -18,6 +18,14 @@
 
 ###
 
+<h2 align="left">Architectural Diagram</h2>
+
+###
+
+![image](https://github.com/AmritaCSN/Malavika_Anand_Major-Investigating-the-effect-of-unprompted-ai-Assistance-on-users-cognitive-ability/assets/120602449/960ad9c2-ebfa-46b3-9cd8-920348b33138)
+
+###
+
 <h2 align="left">Programming Language</h2>
 
 ###
