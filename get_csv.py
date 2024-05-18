@@ -21,7 +21,7 @@ def fetch_and_save_as_csv(url, filename):
     if response.status_code == 200:
         data = response.json()
         df = pd.json_normalize(data)
-        df.to_csv(f"Final_Code/Latest_Analysis_and_Responses/data/{filename}.csv", index=False)
+        df.to_csv(f"data/{filename}.csv", index=False)
     else:
         print(f"Failed to fetch data from {url}. Status code: {response.status_code}")
 

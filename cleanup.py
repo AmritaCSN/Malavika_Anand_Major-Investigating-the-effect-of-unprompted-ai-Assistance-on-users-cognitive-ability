@@ -5,7 +5,7 @@ from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import matplotlib.pyplot as plt
 
 
-
+# Calculates the time difference between eacha actions of the user
 def find_date_time_diff(df):
 
     prompted_grouped_df = df.groupby("user")
@@ -18,7 +18,7 @@ def find_date_time_diff(df):
     df.reset_index(drop=True, inplace=True)
     return df
 
-
+# Takes the latest data from 12th April 2024
 def select_latest_data(df):
     df["date"] = pd.to_datetime(df["date"])
 
@@ -28,7 +28,7 @@ def select_latest_data(df):
 
     return df[(df["date"].dt.date >= start_date)].copy()
 
-
+#  Removes those users who didn't complete the quiz
 def remove_incomplete(df):
     """
     will search the dataframe for people who completed all 12 pages of the quiz
@@ -46,7 +46,7 @@ def remove_incomplete(df):
     df.reset_index(drop=True, inplace=True)
     return df
 
-
+# Keeps the last/final option clicked by the user and removes the other options in the page
 def _extract_final_choice(x):
     """
     to be used in a groupby on "page" and "user"
@@ -61,7 +61,7 @@ def _extract_final_choice(x):
             ]  # -1 because we're reversing
             return x.loc[valid_index]
 
-
+#  Removes the other actions like "Continue", "Start", "Prompt" and "End" and keeps only the options
 def extract_answers(df):
     """
     Filter the dataframe for only the final answers
@@ -79,7 +79,7 @@ def extract_answers(df):
     )
     return final_answers
 
-
+# Extract the correct answer and add it.
 def extract_correct_score(df):
     """
     Extract the correct answer and add it.
@@ -105,11 +105,12 @@ def extract_correct_score(df):
     ).astype(int)
     return df
 
-
+# Evaluates the score by taking the sum 
 def get_user_scores(df):
     return df.groupby("user")["score"].sum()
 
 
+# Statistical analysis on the total score
 def stats(no_as, prompted, unprompted):
     # Assuming your three pandas series are named 'series1', 'series2', and 'series3'
 
@@ -150,7 +151,7 @@ def stats(no_as, prompted, unprompted):
     tukey_results = pairwise_tukeyhsd(data_melted["value"], data_melted["variable"])
     print(tukey_results)
 
-
+# Removes those users who completed test in less than 60 seconds and more than 1500 seconds
 def time_removal(df, low, high):
     times = df.groupby("user")["date_diff"].sum()
     tt = times.astype(np.int64) // 10**9  # convert to seconds
@@ -182,7 +183,7 @@ def cleanup_data(df, low=60, high=1500):
 
     return df
 
-
+# This function will stratify the data into two groups- CRT and Math for further analysis
 def stratify(df):
     """
     This function will stratify the data into two groups:
@@ -208,7 +209,7 @@ def stats_for_math(df):
 
     return df_count
 
-
+# Plot to interpret or visualise how many people answered incorrectly
 def plot_for_incorrect_math(no_as_count, prompted_count, unprompted_count):
     plt.figure(figsize=(10, 6))
     bar_width = 0.25
@@ -226,10 +227,11 @@ def plot_for_incorrect_math(no_as_count, prompted_count, unprompted_count):
     plt.savefig("incorrect_count_math.png")
     plt.show()
     
+# Evalautes math questions score alone
 def get_user_scores_math(df):
     return df.groupby("user")["score"].sum()
 
-
+# calculates mean value for the Math questions
 def math_mean_score(no_as_math, prompted_math, unprompted_math):
 
     no_as = get_user_scores(no_as_math)
@@ -263,7 +265,7 @@ def math_mean_score(no_as_math, prompted_math, unprompted_math):
     plot.savefig("means_math.png")
 
 
-
+# Code to show the plot with significant difference
 def plot_showing_significance():
     import matplotlib.pyplot as plt
 
@@ -295,6 +297,7 @@ def plot_showing_significance():
     plt.show()
 
 
+# Plot fot average time users took to answer the math questions for unprompted and no-assistance group
 def plot_for_time_analysis(no_as_math, unprompted_math):
     no_as_math.loc[:, 'date_diff_seconds'] = no_as_math['date_diff'].apply(lambda x: x.total_seconds())
     unprompted_math.loc[:, 'date_diff'] = unprompted_math['date_diff'].apply(lambda x: x.total_seconds())
